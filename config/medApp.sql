@@ -14,9 +14,9 @@ CREATE TABLE `utilisateurs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE `rendez-vous` (
+CREATE TABLE `rendezvous` (
   `id`INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `date` DATE NOT NULL,
+  `rdv_date` DATE NOT NULL,
   `utilisateur_id`INT NOT NULL,
   FOREIGN KEY(utilisateur_id) REFERENCES utilisateurs(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
