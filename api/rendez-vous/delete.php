@@ -22,7 +22,7 @@
     // Set ID to delete
     $rdv->id = $data->id;
 
-    // DELETE user
+    // DELETE rdv
     if($rdv->delete()){
         echo json_encode(
             array('message'=>'RDV Deleted')
