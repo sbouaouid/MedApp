@@ -8,33 +8,39 @@
     
     include_once '../../config/Database.php';
     include_once '../../models/RendezVous.php';
+    include_once '../../Token/token.php';
 
-    // Instantiate DB & connect 
-    $database = new Database(); 
-    $db = $database->connect(); 
+    if (Token::verifier()) {
+        // Instantiate DB & connect 
+        $database = new Database(); 
+        $db = $database->connect(); 
+    
+        // Instantiate rdv object
+        $rdv = new RendezVous($db); 
+    
+        // Get raw rdv data 
+        $data = json_decode(file_get_contents("php://input"));
+    
+        // Set ID to update
+        $rdv->id = $data->id;
+    
+        $rdv->date = $data->date;
+        $rdv->utilisateur_id = $data->utilisateur_id;
+    
+    
+         // Update rdv 
+         if($rdv->update()){
+             echo json_encode(
+                 array('message'=>'rdv updated')
+             );
+         } else {
+            echo json_encode(
+                array('message'=>'rdv not updated')
+            );
+         } 
+    } else {
+        echo json_encode(array('message' => 'invalide token'));
+    }
 
-    // Instantiate rdv object
-    $rdv = new RendezVous($db); 
-
-    // Get raw rdv data 
-    $data = json_decode(file_get_contents("php://input"));
-
-    // Set ID to update
-    $rdv->id = $data->id;
-
-    $rdv->date = $data->date;
-    $rdv->utilisateur_id = $data->utilisateur_id;
-
-
-     // Update rdv 
-     if($rdv->update()){
-         echo json_encode(
-             array('message'=>'rdv updated')
-         );
-     } else {
-        echo json_encode(
-            array('message'=>'rdv not updated')
-        );
-     }
 
      

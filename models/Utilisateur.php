@@ -28,6 +28,7 @@ class Utilisateur{
     public function read(){
         // Create query 
         $query = 'SELECT 
+            id,
             nom,
             prenom, 
             sexe,
@@ -60,6 +61,7 @@ class Utilisateur{
 
         // Create query 
         $query = 'SELECT
+            id,
             nom,
             prenom, 
             sexe,
@@ -88,6 +90,7 @@ class Utilisateur{
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Set properties
+        $this->id = $row['id'];
         $this->nom = $row['nom'];
         $this->prenom = $row['prenom'];
         $this->sexe = $row['sexe'];
@@ -95,6 +98,55 @@ class Utilisateur{
         $this->email = $row['email'];
         $this->gsm = $row['gsm'];
         $this->naissance = $row['naissance'];
+    }
+
+    
+    /*
+        *******GET SINGLE USER WITH EMAIL
+    */
+
+    public function read_single_email(){
+
+        // Create query 
+        $query = 'SELECT
+            id,
+            nom,
+            prenom, 
+            sexe,
+            adresse, 
+            email,
+            password,
+            gsm, 
+            naissance,
+            role 
+            FROM 
+                '.$this->table.'
+            WHERE 
+                email = ?
+            LIMIT 0,1
+        ';
+
+        // Prepare statement 
+        $stmt = $this->conn->prepare($query);
+
+        // Bind email
+        $stmt->bindParam(1, $this->email);
+
+        // Execute query 
+        $stmt->execute(); 
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Set properties
+        $this->id = $row['id'];
+        $this->nom = $row['nom'];
+        $this->prenom = $row['prenom'];
+        $this->sexe = $row['sexe'];
+        $this->adresse = $row['adresse'];
+        $this->email = $row['email'];
+        $this->password = $row['password'];
+        $this->gsm = $row['gsm'];
+        $this->naissance = $row['naissance'];
+        $this->role = $row['role'];
     }
 
     /*

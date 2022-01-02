@@ -8,27 +8,36 @@
     
     include_once '../../config/Database.php';
     include_once '../../models/Utilisateur.php';
+    include_once '../../Token/token.php';
 
-    // Instantiate DB & connect 
-    $database = new Database(); 
-    $db = $database->connect(); 
-
-    // Instantiate user object 
-    $user = new Utilisateur($db); 
-
-    // Get raw user data 
-    $data = json_decode(file_get_contents("php://input"));
-
-    // Set ID to delete
-    $user->id = $data->id;
-
-    // DELETE user
-    if($user->delete()){
-        echo json_encode(
-            array('message'=>'User Deleted')
-        );
-    }   else {
-        echo json_encode(
-            array('message'=>'User Not Deleted')
-        );
+    if (Token::verifier()) {
+        // Instantiate DB & connect 
+        $database = new Database(); 
+        $db = $database->connect(); 
+    
+        // Instantiate user object 
+        $user = new Utilisateur($db); 
+    
+        // Get raw user data 
+        $data = json_decode(file_get_contents("php://input"));
+    
+        // Set ID to delete
+        $user->id = $data->id;
+    
+        // DELETE user
+        if($user->delete()){
+            http_response_code(200);
+            echo json_encode(
+                array('message'=>'User Deleted')
+            );
+        }   else {
+            http_response_code(400);
+            echo json_encode(
+                array('message'=>'User Not Deleted')
+            );
+        }
+    } else {
+        http_response_code(400);
+        echo json_encode(array('message' => 'invalide token'));
     }
+

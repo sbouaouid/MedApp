@@ -31,10 +31,12 @@
 
      // Create user 
      if($user->create()){
+         http_response_code(201);
          echo json_encode(
              array('message'=>'User Created')
          );
      } else {
+         http_response_code(400);
         echo json_encode(
             array('message'=>'User not created')
         );

@@ -21,6 +21,7 @@ class RendezVous{
     public function read(){
         // Create query 
         $query = 'SELECT 
+            id,
             rdv_date,
             utilisateur_id 
             FROM 
