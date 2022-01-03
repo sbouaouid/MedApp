@@ -18,10 +18,11 @@
         $user = new Utilisateur($db); 
     
         // Get ID
-        $user->id = isset($_GET['id']) ? $_GET['id'] : die();
+        $data = json_decode(file_get_contents("php://input"));
+        $user->email = $data->email;
     
         // Get user
-        $user->read_single(); 
+        $user->read_single_email(); 
     
         // Create array
         $user_arr = array(

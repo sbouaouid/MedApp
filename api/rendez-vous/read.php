@@ -43,15 +43,18 @@
             }
     
             // Turn to JSON & output 
+            http_response_code(200);
             echo json_encode($rdvs_arr);
     
         } else {
             // no rdv
+            http_response_code(404);
             echo json_encode(
                 array('message' => 'RDV introuvables ')
             );
         }
     } else {
+        http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
     }
 

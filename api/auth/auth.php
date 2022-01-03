@@ -6,9 +6,9 @@
     header('Access-Control-Allow-Methods: POST'); 
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With'); 
 
-    include_once '../config/Database.php';
-    include_once '../models/Utilisateur.php';
-    include_once '../Token/token.php';
+    include_once '../../config/Database.php';
+    include_once '../../models/Utilisateur.php';
+    include_once '../../Token/token.php';
 
     // Instantiate DB & connect 
     $database = new Database(); 
@@ -27,7 +27,7 @@
 
     //Verify the password
 
-    if ($user->password == $password) {
+    if (password_verify($password, $user->password)) {
         // Create array
         $user_arr = array(
             'nom' => $user->nom,
@@ -53,7 +53,7 @@
             );
         }
     } else {
-        print_r(json_encode(array("message"=>"le mot de passe est invalide")));
+        echo json_encode(array("message"=>"le mot de passe est invalide"));
     }
 
 ?>

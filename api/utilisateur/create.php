@@ -23,7 +23,7 @@
     $user->prenom = $data->prenom;
     $user->naissance = $data->naissance;
     $user->email = $data->email;
-    $user->password = $data->password;
+    $user->password = password_hash($data->password, PASSWORD_BCRYPT);
     $user->adresse = $data->adresse;
     $user->gsm = $data->gsm;
     $user->sexe = $data->sexe;

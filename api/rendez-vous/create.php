@@ -27,15 +27,18 @@
     
          // Create rdv 
          if($rdv->create()){
+             http_response_code(201);
              echo json_encode(
                  array('message'=>'RDV Created')
              );
          } else {
+             http_response_code(400);
             echo json_encode(
                 array('message'=>'RDV not created')
             );
          }
     } else {
+        http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
     }
 

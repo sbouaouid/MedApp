@@ -28,7 +28,7 @@
         $user->prenom = $data->prenom;
         $user->naissance = $data->naissance;
         $user->email = $data->email;
-        $user->password = $data->password;
+        $user->password = password_hash($data->password, PASSWORD_BCRYPT);
         $user->adresse = $data->adresse;
         $user->gsm = $data->gsm;
         $user->sexe = $data->sexe;
@@ -36,15 +36,18 @@
     
          // Update user 
          if($user->update()){
+             http_response_code(203);
              echo json_encode(
                  array('message'=>'User Updated')
              );
          } else {
+             http_response_code(400);
             echo json_encode(
                 array('message'=>'User not updated')
             );
          }
     } else {
+        http_response_code(400);
         echo json_encode(array("message"=> 'invalide token'));
     }
 

@@ -30,15 +30,18 @@
     
          // Update rdv 
          if($rdv->update()){
+             http_response_code(203);
              echo json_encode(
                  array('message'=>'rdv updated')
              );
          } else {
+             http_response_code(400);
             echo json_encode(
                 array('message'=>'rdv not updated')
             );
          } 
     } else {
+        http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
     }
 

@@ -26,15 +26,18 @@
     
         // DELETE rdv
         if($rdv->delete()){
+            http_response_code(200);
             echo json_encode(
                 array('message'=>'RDV Deleted')
             );
         }   else {
+            http_response_code(400);
             echo json_encode(
                 array('message'=>'RDV Not Deleted')
             );
         }
     } else {
+        http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
     }
 
