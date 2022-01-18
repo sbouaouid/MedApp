@@ -1,21 +1,21 @@
-<?php 
+<?php
 
     //Headers
-    header('Access-Control-Allow-Origin: *'); 
-    header('Content-Type: application/json'); 
-    header('Access-Control-Allow-Methods: POST'); 
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With'); 
+    header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json');
+    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
     include_once '../../config/Database.php';
     include_once '../../models/Utilisateur.php';
     include_once '../../Token/token.php';
 
-    // Instantiate DB & connect 
-    $database = new Database(); 
-    $db = $database->connect(); 
+    // Instantiate DB & connect
+    $database = new Database();
+    $db = $database->connect();
 
     // Instantiate User Object
-    $user = new Utilisateur($db); 
+    $user = new Utilisateur($db);
 
     // Get email
     $data = json_decode(file_get_contents("php://input"));
@@ -23,13 +23,14 @@
     $password = $data->password;
 
     // Get user
-    $user->read_single_email(); 
+    $user->read_single_email();
 
     //Verify the password
 
     if (password_verify($password, $user->password)) {
         // Create array
         $user_arr = array(
+            'id' => $user->id,
             'nom' => $user->nom,
             'prenom' => $user->prenom,
             'sexe' => $user->sexe,
@@ -54,6 +55,7 @@
         }
     } else {
         echo json_encode(array("message"=>"le mot de passe est invalide"));
+        http_response_code(400);
     }
 
 ?>

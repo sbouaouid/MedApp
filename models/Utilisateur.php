@@ -186,7 +186,7 @@ class Utilisateur{
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':adresse', $this->adresse);
-        $stmt->bindParam(':gsm', $this->nom);
+        $stmt->bindParam(':gsm', $this->gsm);
         $stmt->bindParam(':naissance', $this->naissance);
         $stmt->bindParam(':sexe', $this->sexe);
         $stmt->bindParam(':role', $this->role);
@@ -243,7 +243,7 @@ class Utilisateur{
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':adresse', $this->adresse);
-        $stmt->bindParam(':gsm', $this->nom);
+        $stmt->bindParam(':gsm', $this->gsm);
         $stmt->bindParam(':naissance', $this->naissance);
         $stmt->bindParam(':sexe', $this->sexe);
         $stmt->bindParam(':role', $this->role);

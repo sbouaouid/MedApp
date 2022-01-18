@@ -8,7 +8,7 @@
      
 
     include_once '../../config/Database.php';
-    include_once '../../models/RendezVous.php';
+    include_once '../../models/DossierMedical.php';
     include_once '../../Token/token.php';
 
     if (Token::verifier()) {
@@ -16,54 +16,52 @@
         $database = new Database(); 
         $db = $database->connect();
     
-        // rdv object instanciation 
-        $rdv = new RendezVous($db); 
+        // dossierMed object instanciation 
+        $dossierMed = new DossierMedical($db); 
 
-        //Get date
+        //Get ID
         $data = json_decode(file_get_contents("php://input"));
-        $rdv->date = $data->date;
+        $dossierMed->utilisateur_id = $data->utilisateur_id;
     
-        // RDV query
-        $result = $rdv->read();
+        // dossierMed query
+        $result = $dossierMed->read_user();
     
         // Get row count 
         $num = $result->rowCount(); 
     
-        // Check if any rdv 
+        // Check if any dossierMed 
         if($num>0){
-            // rdv array
-            $rdvs_arr = array(); 
-            $rdvs_arr['data'] = array();
+            // dossierMed array
+            $dossierMeds_arr = array(); 
+            $dossierMeds_arr['data'] = array();
     
             while($row = $result->fetch(PDO::FETCH_ASSOC)){
                 // FETCH_ASSOC permet de renvoyer les donnees indexées par les noms de colonnes 
                 // donc on crée un tableau avec les champs voulus
                 // puis on les attribus les donnees retournées 
                 extract($row);
-                $rdv_item = array(
+                $dossierMed_item = array(
                     'id' => $id,
-                    'rdv_date' => $rdv_date,
-                    'rdv_time' => $rdv_time,
                     'utilisateur_id' => $utilisateur_id,
                 );
     
                 // Push to 'data'
-                array_push($rdvs_arr['data'], $rdv_item);
+                array_push($dossierMeds_arr['data'], $dossierMed_item);
             }
     
             // Turn to JSON & output 
             http_response_code(200);
-            echo json_encode($rdvs_arr);
+            echo json_encode($dossierMeds_arr);
     
         } else {
-            // no rdv
+            // no dossierMed
             //http_response_code(404);
             echo json_encode(
-                array('message' => 'RDV introuvables ')
+                array('message' => 'dossierMed introuvable ')
             );
         }
     } else {
-        //http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
+        //http_response_code(400);
     }
 

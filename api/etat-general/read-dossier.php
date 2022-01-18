@@ -8,7 +8,7 @@
      
 
     include_once '../../config/Database.php';
-    include_once '../../models/RendezVous.php';
+    include_once '../../models/EtatGeneral.php';
     include_once '../../Token/token.php';
 
     if (Token::verifier()) {
@@ -16,54 +16,56 @@
         $database = new Database(); 
         $db = $database->connect();
     
-        // rdv object instanciation 
-        $rdv = new RendezVous($db); 
+        // etatGeneral object instanciation 
+        $etatGeneral = new EtatGeneral($db); 
 
-        //Get date
+        //Get ID
         $data = json_decode(file_get_contents("php://input"));
-        $rdv->date = $data->date;
+        $etatGeneral->dossier_id = $data->dossier_id;
     
-        // RDV query
-        $result = $rdv->read();
+        // etatGeneral query
+        $result = $etatGeneral->read_dossier();
     
         // Get row count 
         $num = $result->rowCount(); 
     
-        // Check if any rdv 
+        // Check if any etatGeneral 
         if($num>0){
-            // rdv array
-            $rdvs_arr = array(); 
-            $rdvs_arr['data'] = array();
+            // etatGeneral array
+            $etatGenerals_arr = array(); 
+            $etatGenerals_arr['data'] = array();
     
             while($row = $result->fetch(PDO::FETCH_ASSOC)){
                 // FETCH_ASSOC permet de renvoyer les donnees indexées par les noms de colonnes 
                 // donc on crée un tableau avec les champs voulus
                 // puis on les attribus les donnees retournées 
                 extract($row);
-                $rdv_item = array(
+                $etatGeneral_item = array(
                     'id' => $id,
-                    'rdv_date' => $rdv_date,
-                    'rdv_time' => $rdv_time,
-                    'utilisateur_id' => $utilisateur_id,
+                    'antecedentsFamiliaux' => $antecedentsFamiliaux,
+                    'antecedentsMedicaux' => $antecedentsMedicaux,
+                    'antecedentsChirurgicaux' => $antecedentsChirurgicaux,
+                    'habitudesAlcoloTabagiques' => $habitudesAlcoloTabagiques,
+                    'dossier_id' => $dossier_id,
                 );
     
                 // Push to 'data'
-                array_push($rdvs_arr['data'], $rdv_item);
+                array_push($etatGenerals_arr['data'], $etatGeneral_item);
             }
     
             // Turn to JSON & output 
+            echo json_encode($etatGenerals_arr);
             http_response_code(200);
-            echo json_encode($rdvs_arr);
     
         } else {
-            // no rdv
+            // no etatGeneral
             //http_response_code(404);
             echo json_encode(
-                array('message' => 'RDV introuvables ')
+                array('message' => 'etatGeneral introuvable ')
             );
         }
     } else {
-        //http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
+        //http_response_code(400);
     }
 

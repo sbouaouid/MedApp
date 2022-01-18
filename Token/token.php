@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-require $_SERVER['DOCUMENT_ROOT'].'/MedApp/vendor/autoload.php';
+require $_SERVER['DOCUMENT_ROOT'].'/backend/vendor/autoload.php';
 
     use Firebase\JWT\JWT;
     use Firebase\JWT\Key;
@@ -12,7 +12,7 @@ require $_SERVER['DOCUMENT_ROOT'].'/MedApp/vendor/autoload.php';
 
         public static function auth() {
             $iat = time();
-            $exp = $iat + 60*60*5;
+            $exp = $iat + 60*60*60*5;
             $payload = array(
                 "iss" => "http://localhost/",
                 "aud" => "http://localhost/",
@@ -34,7 +34,7 @@ require $_SERVER['DOCUMENT_ROOT'].'/MedApp/vendor/autoload.php';
                 try {
                     $token = JWT::decode($token, Token::$key, array('HS512'));
                     return true;
-    
+
                 } catch (\Exception $e) {
                     return false;
                 }

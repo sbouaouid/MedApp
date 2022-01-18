@@ -25,6 +25,7 @@
         $rdv->id = $data->id;
     
         $rdv->date = $data->date;
+        $rdv->time = $data->time;
         $rdv->utilisateur_id = $data->utilisateur_id;
     
     
@@ -41,7 +42,7 @@
             );
          } 
     } else {
-        http_response_code(400);
+        //http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
     }
 

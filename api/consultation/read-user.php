@@ -8,7 +8,7 @@
      
 
     include_once '../../config/Database.php';
-    include_once '../../models/RendezVous.php';
+    include_once '../../models/Consultation.php';
     include_once '../../Token/token.php';
 
     if (Token::verifier()) {
@@ -16,54 +16,54 @@
         $database = new Database(); 
         $db = $database->connect();
     
-        // rdv object instanciation 
-        $rdv = new RendezVous($db); 
+        // consultation object instanciation 
+        $consultation = new Consultation($db); 
 
-        //Get date
+        //Get ID
         $data = json_decode(file_get_contents("php://input"));
-        $rdv->date = $data->date;
+        $consultation->utilisateur_id = $data->utilisateur_id;
     
-        // RDV query
-        $result = $rdv->read();
+        // Consultation query
+        $result = $consultation->read_user();
     
         // Get row count 
         $num = $result->rowCount(); 
     
-        // Check if any rdv 
+        // Check if any consultation 
         if($num>0){
-            // rdv array
-            $rdvs_arr = array(); 
-            $rdvs_arr['data'] = array();
+            // consultation array
+            $consultations_arr = array(); 
+            $consultations_arr['data'] = array();
     
             while($row = $result->fetch(PDO::FETCH_ASSOC)){
                 // FETCH_ASSOC permet de renvoyer les donnees indexées par les noms de colonnes 
                 // donc on crée un tableau avec les champs voulus
                 // puis on les attribus les donnees retournées 
                 extract($row);
-                $rdv_item = array(
+                $consultation_item = array(
                     'id' => $id,
-                    'rdv_date' => $rdv_date,
-                    'rdv_time' => $rdv_time,
+                    'consultation_date' => $consultation_date,
+                    'consultation_remarque' => $consultation_remarque,
                     'utilisateur_id' => $utilisateur_id,
                 );
     
                 // Push to 'data'
-                array_push($rdvs_arr['data'], $rdv_item);
+                array_push($consultations_arr['data'], $consultation_item);
             }
     
             // Turn to JSON & output 
             http_response_code(200);
-            echo json_encode($rdvs_arr);
+            echo json_encode($consultations_arr);
     
         } else {
-            // no rdv
+            // no consultation
             //http_response_code(404);
             echo json_encode(
-                array('message' => 'RDV introuvables ')
+                array('message' => 'Consultation introuvable ')
             );
         }
     } else {
-        //http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
+        //http_response_code(400);
     }
 

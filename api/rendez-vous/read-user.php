@@ -3,7 +3,7 @@
     // Headers 
     header('Access-Control-Allow-Origin: *'); 
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST'); 
+    header('Access-Control-Allow-Methods: GET'); 
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With'); 
      
 
@@ -19,12 +19,12 @@
         // rdv object instanciation 
         $rdv = new RendezVous($db); 
 
-        //Get date
+        // Get EMAIL
         $data = json_decode(file_get_contents("php://input"));
-        $rdv->date = $data->date;
+        $rdv->utilisateur_id = $data->utilisateur_id;
     
         // RDV query
-        $result = $rdv->read();
+        $result = $rdv->read_user();
     
         // Get row count 
         $num = $result->rowCount(); 
