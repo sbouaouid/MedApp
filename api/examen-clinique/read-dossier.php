@@ -21,7 +21,7 @@
 
         //Get ID
         $data = json_decode(file_get_contents("php://input"));
-        $examenClinique->dossier_id = $data->dossier_id;
+        $examenClinique->dossier_id = $data->dossierId;
     
         // examenClinique query
         $result = $examenClinique->read_dossier();
@@ -32,8 +32,7 @@
         // Check if any examenClinique 
         if($num>0){
             // examenClinique array
-            $examenCliniques_arr = array(); 
-            $examenCliniques_arr['data'] = array();
+            $examenCliniques_arr = array();
     
             while($row = $result->fetch(PDO::FETCH_ASSOC)){
                 // FETCH_ASSOC permet de renvoyer les donnees indexées par les noms de colonnes 
@@ -50,7 +49,7 @@
                 );
     
                 // Push to 'data'
-                array_push($examenCliniques_arr['data'], $examenClinique_item);
+                array_push($examenCliniques_arr, $examenClinique_item);
             }
     
             // Turn to JSON & output 
@@ -59,10 +58,10 @@
     
         } else {
             // no examenClinique
-            //http_response_code(404);
             echo json_encode(
                 array('message' => 'examenClinique introuvable ')
             );
+            http_response_code(404);
         }
     } else {
         echo json_encode(array('message' => 'invalide token'));

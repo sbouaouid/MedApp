@@ -21,7 +21,7 @@
 
         //Get ID
         $data = json_decode(file_get_contents("php://input"));
-        $etatGeneral->dossier_id = $data->dossier_id;
+        $etatGeneral->dossier_id = $data->dossierId;
     
         // etatGeneral query
         $result = $etatGeneral->read_dossier();
@@ -32,8 +32,7 @@
         // Check if any etatGeneral 
         if($num>0){
             // etatGeneral array
-            $etatGenerals_arr = array(); 
-            $etatGenerals_arr['data'] = array();
+            $etatGenerals_arr = array();
     
             while($row = $result->fetch(PDO::FETCH_ASSOC)){
                 // FETCH_ASSOC permet de renvoyer les donnees indexées par les noms de colonnes 
@@ -50,7 +49,7 @@
                 );
     
                 // Push to 'data'
-                array_push($etatGenerals_arr['data'], $etatGeneral_item);
+                array_push($etatGenerals_arr, $etatGeneral_item);
             }
     
             // Turn to JSON & output 
@@ -59,10 +58,10 @@
     
         } else {
             // no etatGeneral
-            //http_response_code(404);
             echo json_encode(
                 array('message' => 'etatGeneral introuvable ')
             );
+            http_response_code(404);
         }
     } else {
         echo json_encode(array('message' => 'invalide token'));

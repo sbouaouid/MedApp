@@ -87,17 +87,7 @@ class Utilisateur{
         // Execute query 
         $stmt->execute(); 
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Set properties
-        $this->id = $row['id'];
-        $this->nom = $row['nom'];
-        $this->prenom = $row['prenom'];
-        $this->sexe = $row['sexe'];
-        $this->adresse = $row['adresse'];
-        $this->email = $row['email'];
-        $this->gsm = $row['gsm'];
-        $this->naissance = $row['naissance'];
+        return $stmt;
     }
 
     

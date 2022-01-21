@@ -3,7 +3,7 @@
     //Headers
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: GET');
+    header('Access-Control-Allow-Methods: POST');
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
     include_once '../../config/Database.php';
@@ -19,27 +19,46 @@
         $user = new Utilisateur($db);
 
         // Get ID
-        $user->id = isset($_GET['id']) ? $_GET['id'] : die();
+        $data = json_decode(file_get_contents("php://input"));
+        $user->id = $data->id;
 
         // Get user
-        $user->read_single();
+        $result = $user->read_single();
 
-        // Create array
-        $user_arr = array(
-            'id' => $user->id,
-            'nom' => $user->nom,
-            'prenom' => $user->prenom,
-            'sexe' => $user->sexe,
-            'adresse' => $user->adresse,
-            'email' => $user->email,
-            'gsm' => $user->gsm,
-            'naissance' => $user->naissance
-        );
 
-        // Make JSON
-        print_r(json_encode($user_arr));
-        http_response_code(200);
+        $num = $result->rowCount(); 
+    
+        // Check if any user 
+        if($num>0){
+            // user array
+            $users_arr = array();
+    
+            while($row = $result->fetch(PDO::FETCH_ASSOC)){
+                // FETCH_ASSOC permet de renvoyer les donnees indexées par les noms de colonnes 
+                // donc on crée un tableau avec les champs voulus
+                // puis on les attribus les donnees retournées 
+                extract($row);
+                $user_item = array(
+                    'id' => $id,
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'sexe' => $sexe,
+                    'adresse' => $adresse,
+                    'email' => $email,
+                    'gsm' => $gsm,
+                    'naissance' => $naissance
+                );
+    
+                // Push to 'data'
+                array_push($users_arr, $user_item);
+            }
+    
+            // Turn to JSON & output 
+            http_response_code(200);
+            echo json_encode($users_arr);
+
     } else {
         //http_response_code(400);
         echo json_encode(array('message' => 'invalide token'));
     }
+}

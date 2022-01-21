@@ -28,7 +28,7 @@
     
         // Get row count 
         $num = $result->rowCount(); 
-    
+
         // Check if any rdv 
         if($num>0){
             // rdv array

@@ -21,7 +21,7 @@
 
         //Get ID
         $data = json_decode(file_get_contents("php://input"));
-        $document->dossier_id = $data->dossier_id;
+        $document->dossier_id = $data->dossierId;
     
         // document query
         $result = $document->read_dossier();
@@ -32,8 +32,7 @@
         // Check if any document 
         if($num>0){
             // document array
-            $documents_arr = array(); 
-            $documents_arr['data'] = array();
+            $documents_arr = array();
     
             while($row = $result->fetch(PDO::FETCH_ASSOC)){
                 // FETCH_ASSOC permet de renvoyer les donnees indexées par les noms de colonnes 
@@ -49,7 +48,7 @@
                 );
     
                 // Push to 'data'
-                array_push($documents_arr['data'], $document_item);
+                array_push($documents_arr, $document_item);
             }
     
             // Turn to JSON & output 
@@ -58,10 +57,10 @@
     
         } else {
             // no document
-            //http_response_code(404);
             echo json_encode(
                 array('message' => 'document introuvable ')
             );
+            http_response_code(404);
         }
     } else {
         echo json_encode(array('message' => 'invalide token'));
