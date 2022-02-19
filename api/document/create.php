@@ -39,9 +39,11 @@
         }
         else
         {
-            $upload_path = '../../upload'; // set upload folder path 
+            // set upload folder path
+            $upload_path = '../../upload';  
             
-            $fileExt = strtolower(pathinfo($fileName,PATHINFO_EXTENSION)); // get extension extension
+            // get extension extension
+            $fileExt = strtolower(pathinfo($fileName,PATHINFO_EXTENSION)); 
                 
             // valid file extensions
             $valid_extensions = array('doc','pdf','jpeg', 'jpg', 'png'); 
@@ -54,7 +56,8 @@
                 {
                     // check file size '5MB'
                     if($fileSize < 5000000){
-                        move_uploaded_file($tempPath, $upload_path . $fileName); // move file from system temporary path to our upload folder path 
+                        // move file from system temporary path to our upload folder path 
+                        move_uploaded_file($tempPath, $upload_path . $fileName); 
                     }
                     else{		
                         $errorMSG = json_encode(array("message" => "Sorry, your file is too large, please upload 5 MB size", "status" => false));	
